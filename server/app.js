@@ -12,13 +12,14 @@ var app = express();
 var port = process.env.PORT || 3001
 
 // app.set('view engine', 'ejs')
-app.use('/assets', express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(__dirname, '..', 'app', 'build')));
+console.log(path.join(__dirname, '..', 'app', 'public'));
 app.use(cors());
+console.log('credentials', process.env.USER_NAME, process.env.PASSWORD);
 
 const user = encodeURIComponent(process.env.USER_NAME);
 const pwd = encodeURIComponent(process.env.PASSWORD);
 const conn_str = `mongodb+srv://${user}:${pwd}@todo.ojfzijq.mongodb.net/?retryWrites=true&w=majority`
-
 try {
   mongoose.connect(conn_str);
   console.log('successful connected');
@@ -29,7 +30,8 @@ try {
 
 
 app.get('/', (req, res) => {
-  res.json({ answer: 'hello world' })
+  res.render("index")
+  // res.json({ answer: 'hello world' })
 })
 
 if (process.env.ENVIRONMENT === 'development') {

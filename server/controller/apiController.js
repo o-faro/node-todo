@@ -15,9 +15,9 @@ module.exports = (app) => {
       });
 
   });
-  app.get('/api/todo/:id', (req, res) => {
+  app.get('/api/todo/:id', async (req, res) => {
     console.log(':id', req.params);
-    Todos.findById({ _id: req.params.id })
+    await Todos.findById({ _id: req.params.id })
       .then(data => res.send(data))
       .catch(error => {
         console.log(error);
@@ -25,9 +25,9 @@ module.exports = (app) => {
       })
   })
 
-  app.post('/api/todo', (req, res) => {
+  app.post('/api/todo', async (req, res) => {
     if (req.body.id) {
-      Todos.findByIdAndUpdate(req.body.id, {
+      await Todos.findByIdAndUpdate(req.body.id, {
         todo: req.body.todo,
         isDone: req.body.isDone,
         hasAttachement: req.body.hasAttachement,
@@ -38,7 +38,7 @@ module.exports = (app) => {
         })
     }
     else {
-      const newTodo = Todos({
+      const newTodo = await Todos({
         username: req.body.username,
         todo: req.body.todo,
         isDone: req.body.isDone,
@@ -53,8 +53,8 @@ module.exports = (app) => {
     }
   });
 
-  app.delete('/api/todo', (req, res) => {
-    Todos.findByIdAndDelete(req.body.id)
+  app.delete('/api/todo', async (req, res) => {
+    await Todos.findByIdAndDelete(req.body.id)
       .then(data => res.send('successfully deleted'))
       .catch(err => {
         throw err
